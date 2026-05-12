@@ -1,0 +1,1 @@
+// splits 90min activity → 3x 30min blocks
