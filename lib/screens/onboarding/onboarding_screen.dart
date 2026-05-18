@@ -105,7 +105,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           'What should we call you?',
                           style: AppTextStyles.subtitle,
                         ),
-                        
+                        const Spacer(flex: 1),
+
 
                         AnimatedOpacity(
                           opacity: _canContinue ? 1.0 : 0.0,
@@ -113,6 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           child: PillButton(
                             label: 'Continue',
                             onTap: _canContinue ? _saveName : null,
+                            alignment: MainAxisAlignment.start,
                           ),
                         ),
 
