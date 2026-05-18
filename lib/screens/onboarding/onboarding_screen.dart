@@ -54,9 +54,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     await prefs.setString('user_name', name);
 
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, '/home', arguments: {
-      'userName': name,
-    });
+    Navigator.pushReplacementNamed(
+      context,
+      '/home',
+      arguments: {'userName': name},
+    );
   }
 
   @override
@@ -78,14 +80,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Spacer(flex: 3),
-
-                        Text('Have we met?', style: AppTextStyles.displayLarge),
-                        const SizedBox(height: 8),
-                        Text('What can we call you?', style: AppTextStyles.subtitle),
-
-                        const Spacer(flex: 1),
-
+                        const Spacer(flex: 4),
+                        Text(
+                          'Cards on time',
+                          style: AppTextStyles.displayLarge,
+                        ),
+                        Text(
+                          'Welcome to Cards on time!',
+                          style: AppTextStyles.displaySmall,
+                        ),
+                        const Spacer(flex: 2),
                         AppTextField(
                           controller: _nameController,
                           focusNode: _focusNode,
@@ -96,6 +100,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           textInputAction: TextInputAction.done,
                           onSubmitted: _canContinue ? (_) => _saveName() : null,
                         ),
+                        Text(
+                          'What should we call you?',
+                          style: AppTextStyles.subtitle,
+                        ),
+                        const SizedBox(height: 24),
 
                         const SizedBox(height: 24),
 
