@@ -107,7 +107,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         ),
                         const Spacer(flex: 1),
 
-
                         AnimatedOpacity(
                           opacity: _canContinue ? 1.0 : 0.0,
                           duration: const Duration(milliseconds: 250),
