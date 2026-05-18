@@ -44,17 +44,6 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  void _onPlanThisWeek() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Week planning coming soon!'),
-        backgroundColor: AppColors.surface,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Spacer(flex: 3),
 
@@ -79,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen>
                     style: AppTextStyles.subtitle,
                   ),
 
-                  const Spacer(flex: 3),
+                  const Spacer(flex: 1),
 
                   PillButton(
                     label: 'Start planning today',
@@ -93,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen>
                   PillButton(
                     label: 'Start planning this week',
                     icon: Icons.calendar_month_outlined,
-                    onTap: _onPlanThisWeek,
                     disabled: true,
                   ),
 
