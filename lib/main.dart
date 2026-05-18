@@ -10,6 +10,9 @@ import 'screens/home/home_screen.dart';
 // import 'screens/swipe_game/swipe_screen.dart';
 // import 'screens/overview/overview_screen.dart';
 
+// background widget is used on every screen, so we import it here to make it work on all screens without needing to import it in each file.
+import 'shared/widgets/app_background.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

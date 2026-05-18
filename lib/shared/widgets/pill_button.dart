@@ -10,6 +10,7 @@ class PillButton extends StatefulWidget {
   final VoidCallback? onTap;
   final bool disabled;
   final Color? color;
+  final MainAxisAlignment alignment;
 
   const PillButton({
     super.key,
@@ -18,6 +19,7 @@ class PillButton extends StatefulWidget {
     this.onTap,
     this.disabled = false,
     this.color,
+    this.alignment = MainAxisAlignment.center,
   });
 
   @override
@@ -64,7 +66,7 @@ class _PillButtonState extends State<PillButton> {
             borderRadius: BorderRadius.circular(50),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: widget.alignment,
             children: [
               if (widget.icon != null) ...[
                 Icon(widget.icon, color: Colors.white, size: 20),

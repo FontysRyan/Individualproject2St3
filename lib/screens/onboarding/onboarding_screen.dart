@@ -75,17 +75,18 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   children: [
                     const Spacer(flex: 3),
 
-                    Text('Have we met?', style: AppTextStyles.displayLarge),
+                    Text('Have we met?', style: AppTextStyles.displayLarge, ),
                     const SizedBox(height: 8),
                     Text('What can we call you?', style: AppTextStyles.subtitle),
 
-                    const Spacer(flex: 2),
+                    const Spacer(flex: 1),
 
                     AppTextField(
                       controller: _nameController,
                       focusNode: _focusNode,
                       label: 'Name',
                       hint: 'Please fill in your name',
+                      useFloatingLabel: true,
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.done,
                       onSubmitted: _canContinue ? (_) => _saveName() : null,
@@ -98,6 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       opacity: _canContinue ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 250),
                       child: PillButton(
+                        alignment: MainAxisAlignment.start,
                         label: 'Continue',
                         onTap: _canContinue ? _saveName : null,
                       ),
