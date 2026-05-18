@@ -89,7 +89,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           'Welcome to Cards on time!',
                           style: AppTextStyles.displaySmall,
                         ),
-                        const Spacer(flex: 2),
+                        const Spacer(flex: 3),
                         AppTextField(
                           controller: _nameController,
                           focusNode: _focusNode,
@@ -100,13 +100,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           textInputAction: TextInputAction.done,
                           onSubmitted: _canContinue ? (_) => _saveName() : null,
                         ),
+                        const SizedBox(height: 10),
                         Text(
                           'What should we call you?',
                           style: AppTextStyles.subtitle,
                         ),
-                        const SizedBox(height: 24),
-
-                        const SizedBox(height: 24),
+                        
 
                         AnimatedOpacity(
                           opacity: _canContinue ? 1.0 : 0.0,
