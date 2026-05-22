@@ -167,7 +167,7 @@ class _TimePickerSheetState extends State<_TimePickerSheet> {
 
           // Wheels row
           SizedBox(
-            height: 180,
+            height: 150,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -198,7 +198,7 @@ class _TimePickerSheetState extends State<_TimePickerSheet> {
             ),
           ),
 
-          const SizedBox(height: 28),
+          const SizedBox(height: 10),
 
           // Confirm button
           // but built inline to avoid an import cycle with PillButton.
@@ -224,7 +224,8 @@ class _TimePickerSheetState extends State<_TimePickerSheet> {
   }
 }
 
-// ── Scroll wheel column ───────────────────────────────────────────────────────
+// Scroll wheel column
+// A reusable widget for the hour and minute wheels in the time picker sheet.
 
 class _WheelColumn extends StatelessWidget {
   final FixedExtentScrollController controller;
