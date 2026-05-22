@@ -4,5 +4,5 @@ class DevFlags {
 
   /// Set to true to always show onboarding, even if a name is already saved.
   /// Useful for testing the onboarding flow without clearing app data.
-  static const bool forceShowOnboarding = false;
+  static const bool forceShowOnboarding = true;
 }
