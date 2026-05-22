@@ -48,6 +48,7 @@ class CardsOnTimeApp extends StatelessWidget {
       theme: AppTheme.darkTheme,
       initialRoute: initialRoute,
       onGenerateRoute: (settings) {
+        // ignore: avoid_print
         print('Navigating to: ${settings.name}');
 
         switch (settings.name) {
@@ -65,6 +66,7 @@ class CardsOnTimeApp extends StatelessWidget {
             );
 
           default:
+            // ignore: avoid_print
             print('Route not found: ${settings.name}');
             return MaterialPageRoute(
               builder: (ctx) => Scaffold(

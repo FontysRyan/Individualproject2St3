@@ -29,4 +29,15 @@ class AppColors {
   // Energy bar
   static const Color energyHigh = Color(0xFF4CAF70);
   static const Color energyLow = Color(0xFFE53935);
+
+  // progress bar
+  static const Color progressStart = Color.fromARGB(255, 89, 94, 203);
+  static const Color progressEnd = Color.fromARGB(255, 6, 15, 186);
+
+  // color for survey screen card background coming in
+  static const surveyBackground_1 = Color(0xFF28274C);
+  static const surveyBackground_2 = Color(0xFF525273);
+  static const surveyBackground_3 = Color(0xFF34325E);
+  static const surveyBackground_4 = Color(0xFF252351);
+
 }

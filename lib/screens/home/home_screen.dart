@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/text_styles.dart';
 import '../../shared/widgets/app_background.dart';
 import '../../shared/widgets/pill_button.dart';
+// Import the new survey screen — adjust the path if your folder structure differs.
+import '../survey/survey_day_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -15,19 +16,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animController;
-  late Animation<double> _fadeIn;
+  late final AnimationController _animController;
+  late final Animation<double> _fadeIn;
 
   @override
   void initState() {
     super.initState();
 
-    // Simple fade — same as onboarding, keeps transitions consistent
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _fadeIn = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
+    _fadeIn =
+        CurvedAnimation(parent: _animController, curve: Curves.easeOut);
     _animController.forward();
   }
 
@@ -38,10 +39,26 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onPlanToday() {
-    Navigator.pushNamed(context, '/survey', arguments: {
-      'planType': 'today',
-      'userName': widget.userName,
-    });
+    // Use a custom fade-out/fade-in transition so the move to SurveyDayScreen
+    // feels like an in-place change rather than a slide push.
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        // No back-swipe during an active planning session keeps the flow clean.
+        fullscreenDialog: false,
+        pageBuilder: (_, _, _) =>
+            SurveyDayScreen(userName: widget.userName),
+        transitionsBuilder: (_, animation, _, child) {
+          return FadeTransition(
+            opacity: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOut,
+            ),
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 280),
+      ),
+    );
   }
 
   @override
@@ -73,12 +90,12 @@ class _HomeScreenState extends State<HomeScreen>
                   PillButton(
                     label: 'Start planning today',
                     icon: Icons.calendar_today_outlined,
-                    onTap: _onPlanToday,
+                    onTap: _onPlanToday, // ← updated
                   ),
 
                   const SizedBox(height: 16),
 
-                  // disabled: true — remove when week flow is ready
+                  // Week flow not yet built — disabled until ready.
                   PillButton(
                     label: 'Start planning this week',
                     icon: Icons.calendar_month_outlined,
