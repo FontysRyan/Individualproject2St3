@@ -13,7 +13,6 @@ class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         surface: AppColors.surface,
-        // 'background' is deprecated; using 'surface' instead where appropriate.
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
