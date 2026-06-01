@@ -13,6 +13,12 @@ import 'screens/survey/survey_day_screen.dart';
 // import 'screens/swipe_game/swipe_screen.dart';
 // import 'screens/overview/overview_screen.dart';
 
+// TODO: fix navigation from home to survey screen and return not logging correctly.
+// Navigating to: /home
+// Navigating to: null
+// Navigating to: null
+// Returning to: null
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const CardsOnTimeApp());
