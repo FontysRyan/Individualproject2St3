@@ -194,11 +194,29 @@ class AppTextStyles {
     letterSpacing: 0.5,
   );
 
+  static const TextStyle labelMedium = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textMuted,
+    letterSpacing: 0.4,
+  );
+
   static const TextStyle labelSmall = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.textMuted,
     letterSpacing: 0.5,
+  );
+
+  // ─────────────────────────────────────────────
+  // HEADLINE (M3-style alias)
+  // ─────────────────────────────────────────────
+
+  static const TextStyle headlineMedium = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.3,
   );
 
   // ─────────────────────────────────────────────

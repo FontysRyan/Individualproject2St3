@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/text_styles.dart';
 
 /// A reusable full-width pill-shaped button used throughout Cards On Time.
+/// TODO: Make so you can send color to pillbutton instead of always being on green.
 class PillButton extends StatefulWidget {
   final String label;
   final IconData? icon;

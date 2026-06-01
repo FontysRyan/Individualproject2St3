@@ -14,8 +14,12 @@ class NumberStepperField extends StatelessWidget {
   final int min;
   final int max;
 
-  /// Optional unit shown next to the number, e.g. 'hr' or 'min'.
   final String? unit;
+
+  final int step;
+
+  // Als je hem nog niet gebruikt, kun je hem alvast toevoegen.
+  final bool secondary;
 
   final ValueChanged<int> onChanged;
 
@@ -28,19 +32,22 @@ class NumberStepperField extends StatelessWidget {
     this.min = 0,
     this.max = 99,
     this.unit,
+    this.step = 1,
+    this.secondary = false,
   });
 
-  void _decrement() {
-    if (value <= min) return;
-    HapticFeedback.lightImpact();
-    onChanged(value - 1);
-  }
+void _decrement() {
+  if (value <= min) return;
+  HapticFeedback.lightImpact();
+  onChanged((value - step).clamp(min, max));
+}
 
-  void _increment() {
-    if (value >= max) return;
-    HapticFeedback.lightImpact();
-    onChanged(value + 1);
-  }
+void _increment() {
+  if (value >= max) return;
+  HapticFeedback.lightImpact();
+  onChanged((value + step).clamp(min, max));
+}
+
 
   @override
   Widget build(BuildContext context) {

@@ -54,11 +54,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     await prefs.setString('user_name', name);
 
     if (!mounted) return;
-    Navigator.pushReplacementNamed(
-      context,
-      '/home',
-      arguments: {'userName': name},
-    );
+    // Pass name directly as String — matches main.dart routing expectations.
+    Navigator.pushReplacementNamed(context, '/home', arguments: name);
   }
 
   @override
@@ -67,7 +64,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       body: AppBackground(
         child: Stack(
           children: [
-            // ── Ambient card background
             const Positioned.fill(child: FloatingCardsBackground()),
 
             SafeArea(
@@ -81,15 +77,18 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Spacer(flex: 4),
+
                         Text(
                           'Cards on time',
                           style: AppTextStyles.displayLarge,
                         ),
+
                         Text(
                           'Welcome to Cards on time!',
                           style: AppTextStyles.displaySmall,
                         ),
                         const Spacer(flex: 3),
+
                         AppTextField(
                           controller: _nameController,
                           focusNode: _focusNode,
