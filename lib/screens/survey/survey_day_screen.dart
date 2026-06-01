@@ -497,6 +497,7 @@ class _StepActivities extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
+                    
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -647,7 +648,6 @@ class _ActivitySummaryRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Accent dot using primary color
           Container(
             width: 8,
             height: 8,
@@ -680,19 +680,27 @@ class _ActivitySummaryRow extends StatelessWidget {
           ),
 
           // Delete button
-          GestureDetector(
-            onTap: onDelete,
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.statusOverloaded.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                Icons.close_rounded,
-                size: 16,
-                color: AppColors.statusOverloaded,
+          Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            child: InkWell(
+              onTap: onDelete,
+              borderRadius: BorderRadius.circular(10),
+              hoverColor: AppColors.statusOverloaded.withValues(alpha: 0.18),
+              highlightColor: AppColors.statusOverloaded.withValues(alpha: 0.22),
+              splashColor: AppColors.statusOverloaded.withValues(alpha: 0.26),
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: AppColors.statusOverloaded.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.delete_outline_rounded,
+                  size: 16,
+                  color: AppColors.statusOverloaded,
+                ),
               ),
             ),
           ),
