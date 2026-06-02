@@ -18,6 +18,23 @@ import '../../shared/models/survey_data.dart';
 // Helpers
 import '../../shared/widgets/delete_popup.dart';
 
+// ─────────────────────────────────────────────────────────────
+// SurveyDayScreen
+//
+// Main controller screen for the daily survey flow.
+//
+// Responsibilities:
+// - Controls survey navigation between steps (time, activities, ready)
+// - Stores temporary survey state/data (available time, start time, activities)
+// - Handles intro animations (card expansion, title fade/slide, progress bar)
+// - Builds the active survey step widget (passing necessary data and callbacks)
+//
+// Step flow:
+// 1. Time
+// 2. Activities
+// 3. Ready confirmation
+// ─────────────────────────────────────────────────────────────
+
 class SurveyDayScreen extends StatefulWidget {
   final String userName;
 
@@ -40,10 +57,10 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
   late final Animation<double> _gradientOpacity;
   late final Animation<double> _surveyOpacity;
 
-  int _currentStep = SurveyConstants.stepTime;
+  int _currentStep = SurveyConstants.stepTime; // Start at the first step (time screen)
 
-  int _availableHours = SurveyConstants.defaultAvailableHours;
-  int _availableMinutes = SurveyConstants.defaultAvailableMinutes;
+  int _availableHours = SurveyConstants.defaultAvailableHours; // Default to 1 hour available
+  int _availableMinutes = SurveyConstants.defaultAvailableMinutes; // Default to 0 minutes available
 
   TimeOfDay? _startTime;
 
@@ -164,7 +181,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
   }
 
   void _onConfirm() {
-    final data = SurveyDayData(
+    final data = SurveyDayData( // Construct final data object to be used in app logic
       availableHours: _availableHours,
       availableMinutes: _availableMinutes,
       startTime: _startTime != null
