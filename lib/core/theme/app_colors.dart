@@ -10,7 +10,24 @@ class AppColors {
 
   // Brand
   static const Color primary = Color(0xFF4CAF70);       
-  static const Color primaryDisabled = Color(0xFF2E5A3E); 
+  static const Color primaryDisabled = Color(0xFF2E5A3E);
+  static const Color oppositeOfPrimary = Colors.redAccent;
+  static const Color oppositeOfPrimaryHover = Colors.redAccent;
+  static const Color oppositeOfPrimaryDisabled = Colors.redAccent; // red is already a strong
+  static const Color accent = Color(0xFFFF9800);
+  static const Color accentHover = Color(0xFFFFA733);
+  static const Color accentDisabled = Color(0xFF5A3E2E);
+
+
+  // Feedback
+  static const Color error = Color(0xFFE53935);
+  static const Color success = Color(0xFF4CAF70);
+  static const Color warning = Color(0xFFFF9800);
+  static const Color info = Color(0xFF2196F3);
+  static const Color neutral = Color(0xFF6B6F8A);
+  static const Color neutralHover = Color(0xFF7B7F9A);
+  static const Color neutralDisabled = Color(0xFF3A3C5A);
+  
 
   // Text
   static const Color textPrimary = Color(0xFFFFFFFF);

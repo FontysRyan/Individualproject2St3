@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/text_styles.dart';
 
-/// Generic confirmation bottom sheet.
+/// Generic confirmation bottom sheet for destructive actions.
+/// This is a reusable widget that can be used anywhere in the app where you need to confirm a destructive action (like deleting an activity).
 ///
 /// Usage:
 /// ```dart
 /// final confirmed = await showConfirmDialog(
 ///   context,
 ///   title: 'Remove activity?',
-///   description: 'You\'re about to remove "$name". This can\'t be undone.',
+///   description: 'Remove "Kanban board". This can\'t be undone.',
 ///   icon: Icons.delete_outline_rounded,
 ///   confirmLabel: 'Remove',
-///   cancelLabel: 'Keep it',
-///   confirmColor: Colors.redAccent,
 /// );
 /// ```
 Future<bool> showConfirmDialog(
@@ -23,11 +22,23 @@ Future<bool> showConfirmDialog(
   required String description,
   required IconData icon,
   required String confirmLabel,
+
   String cancelLabel = 'Cancel',
+
+  // Confirm/destructive styling
   Color? confirmColor,
+
+  // Icon styling
   Color? iconColor,
   Color? iconBackground,
+
+  // Cancel/safe styling
+  Color? cancelColor,
+  Color? cancelTextColor,
+  BorderSide? cancelBorder,
 }) async {
+  final destructiveColor = confirmColor ?? Colors.redAccent;
+
   final result = await showModalBottomSheet<bool>(
     context: context,
     useRootNavigator: true,
@@ -36,14 +47,29 @@ Future<bool> showConfirmDialog(
       title: title,
       description: description,
       icon: icon,
+
       confirmLabel: confirmLabel,
       cancelLabel: cancelLabel,
-      confirmColor: confirmColor ?? AppColors.primary,
-      iconColor: iconColor ?? (confirmColor ?? AppColors.primary),
-      iconBackground:
-          iconBackground ?? (confirmColor ?? AppColors.primary).withValues(alpha: 0.12),
+
+      confirmColor: destructiveColor,
+
+      iconColor: iconColor ?? destructiveColor,
+
+      iconBackground: iconBackground ??
+          destructiveColor.withValues(alpha: 0.12),
+
+      cancelColor:
+          cancelColor ?? AppColors.surfaceElevated,
+
+      cancelTextColor:
+          cancelTextColor ?? AppColors.textPrimary,
+
+      cancelBorder:
+          cancelBorder ??
+          const BorderSide(color: AppColors.border),
     ),
   );
+
   return result ?? false;
 }
 
@@ -51,21 +77,35 @@ class _ConfirmSheet extends StatelessWidget {
   final String title;
   final String description;
   final IconData icon;
+
   final String confirmLabel;
   final String cancelLabel;
+
   final Color confirmColor;
+
   final Color iconColor;
   final Color iconBackground;
+
+  final Color cancelColor;
+  final Color cancelTextColor;
+  final BorderSide cancelBorder;
 
   const _ConfirmSheet({
     required this.title,
     required this.description,
     required this.icon,
+
     required this.confirmLabel,
     required this.cancelLabel,
+
     required this.confirmColor,
+
     required this.iconColor,
     required this.iconBackground,
+
+    required this.cancelColor,
+    required this.cancelTextColor,
+    required this.cancelBorder,
   });
 
   @override
@@ -95,7 +135,7 @@ class _ConfirmSheet extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon badge
+                // Tinted icon badge — color matches the action so the user. Eg red for delete, blue for archive, etc.
                 Container(
                   width: 48,
                   height: 48,
@@ -103,12 +143,19 @@ class _ConfirmSheet extends StatelessWidget {
                     color: iconBackground,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(icon, color: iconColor, size: 24),
+                  child: Icon(
+                    icon,
+                    color: iconColor,
+                    size: 24,
+                  ),
                 ),
 
                 const SizedBox(height: 16),
 
-                Text(title, style: AppTextStyles.displayMedium),
+                Text(
+                  title,
+                  style: AppTextStyles.displayMedium,
+                ),
 
                 const SizedBox(height: 8),
 
@@ -121,43 +168,55 @@ class _ConfirmSheet extends StatelessWidget {
 
                 const SizedBox(height: 28),
 
-                // Buttons — confirm on the left, cancel on the right
                 Row(
                   children: [
                     Expanded(
                       child: FilledButton(
-                        onPressed: () => Navigator.of(context).pop(true),
+                        onPressed: () =>
+                            Navigator.of(context).pop(true),
                         style: FilledButton.styleFrom(
                           backgroundColor: confirmColor,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                          ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius:
+                                BorderRadius.circular(14),
                           ),
                         ),
                         child: Text(
                           confirmLabel,
-                          style: AppTextStyles.labelLarge.copyWith(
+                          style:
+                              AppTextStyles.labelLarge.copyWith(
                             color: Colors.white,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
                     ),
+
                     const SizedBox(width: 12),
+
                     Expanded(
                       child: FilledButton(
-                        onPressed: () => Navigator.of(context).pop(false),
+                        onPressed: () =>
+                            Navigator.of(context).pop(false),
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.surfaceElevated,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          backgroundColor: cancelColor,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                          ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            side: const BorderSide(color: AppColors.border),
+                            borderRadius:
+                                BorderRadius.circular(14),
+                            side: cancelBorder,
                           ),
                         ),
                         child: Text(
                           cancelLabel,
-                          style: AppTextStyles.labelLarge.copyWith(
-                            color: AppColors.textPrimary,
+                          style:
+                              AppTextStyles.labelLarge.copyWith(
+                            color: cancelTextColor,
                           ),
                         ),
                       ),

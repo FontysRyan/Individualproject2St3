@@ -14,7 +14,7 @@ class SurveyConstants {
 
   // ── Time step defaults ────────────────────────────────────────────────────
 
-  static const int defaultAvailableHours = 4;
+  static const int defaultAvailableHours = 1;
   static const int defaultAvailableMinutes = 0;
 
   /// Minimum available hours — must be at least 1 to allow activity planning.

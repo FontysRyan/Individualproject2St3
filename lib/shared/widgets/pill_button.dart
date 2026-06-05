@@ -3,14 +3,22 @@ import 'package:flutter/services.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/text_styles.dart';
 
-/// A reusable full-width pill-shaped button used throughout Cards On Time.
-/// TODO: Make so you can send color to pillbutton instead of always being on green.
+/// A full-width pill-shaped button used throughout Cards On Time.
+///
+/// Color system:
+/// [backgroundColor] overrides the fill. Defaults to [AppColors.primary].
+/// [textColor] overrides the label/icon color. Defaults to white.
+/// When [onTap] is null, the button automatically renders in its disabled
+/// state using [AppColors.primaryDisabled] regardless of [backgroundColor].
+/// The [disabled] flag is kept for cases where the tap handler exists but the
+/// button should visually block interaction (e.g. async submission in progress like a input field that is required).
 class PillButton extends StatefulWidget {
   final String label;
   final IconData? icon;
   final VoidCallback? onTap;
   final bool disabled;
-  final Color? color;
+  final Color? backgroundColor;
+  final Color? textColor;
   final MainAxisAlignment alignment;
 
   const PillButton({
@@ -19,7 +27,8 @@ class PillButton extends StatefulWidget {
     this.icon,
     this.onTap,
     this.disabled = false,
-    this.color,
+    this.backgroundColor,
+    this.textColor,
     this.alignment = MainAxisAlignment.center,
   });
 
@@ -48,9 +57,13 @@ class _PillButtonState extends State<PillButton> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = _isDisabled
+    final resolvedBackground = _isDisabled
         ? AppColors.primaryDisabled
-        : (widget.color ?? AppColors.primary);
+        : (widget.backgroundColor ?? AppColors.primary);
+
+
+    final resolvedTextColor =
+        _isDisabled ? AppColors.textMuted : (widget.textColor ?? Colors.white);
 
     return GestureDetector(
       onTapDown: _onTapDown,
@@ -63,17 +76,22 @@ class _PillButtonState extends State<PillButton> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
           decoration: BoxDecoration(
-            color: bgColor,
+            color: resolvedBackground,
             borderRadius: BorderRadius.circular(50),
           ),
           child: Row(
             mainAxisAlignment: widget.alignment,
             children: [
               if (widget.icon != null) ...[
-                Icon(widget.icon, color: Colors.white, size: 20),
+                Icon(widget.icon, color: resolvedTextColor, size: 20),
                 const SizedBox(width: 10),
               ],
-              Text(widget.label, style: AppTextStyles.buttonLabel),
+              Text(
+                widget.label,
+                style: AppTextStyles.buttonLabel.copyWith(
+                  color: resolvedTextColor,
+                ),
+              ),
             ],
           ),
         ),

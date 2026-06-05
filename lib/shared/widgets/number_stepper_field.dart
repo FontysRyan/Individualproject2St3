@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/text_styles.dart';
 
-/// A tappable field row with − / + buttons for picking an integer value.
 
 class NumberStepperField extends StatelessWidget {
   final String label;
@@ -18,8 +17,6 @@ class NumberStepperField extends StatelessWidget {
 
   final int step;
 
-  // Als je hem nog niet gebruikt, kun je hem alvast toevoegen.
-  final bool secondary;
 
   final ValueChanged<int> onChanged;
 
@@ -29,11 +26,10 @@ class NumberStepperField extends StatelessWidget {
     required this.icon,
     required this.value,
     required this.onChanged,
-    this.min = 0,
+    this.min = 1,
     this.max = 99,
     this.unit,
     this.step = 1,
-    this.secondary = false,
   });
 
 void _decrement() {
@@ -105,6 +101,7 @@ void _increment() {
 
 /// The small circular −/+ button used inside [NumberStepperField].
 /// Disabled appearance when [onTap] is null (at min/max boundary). Allow user to know they can't go further in that direction.
+/// Like we don't want activity to last over 24hr or abover 45 min, cause 60 min = 1 hour and can easy to just better tap 1 hour.
 class _StepButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback? onTap;
