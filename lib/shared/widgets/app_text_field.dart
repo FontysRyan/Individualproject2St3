@@ -22,12 +22,15 @@ class AppTextField extends StatefulWidget {
 
   final TextAlign textAlign;
 
-
   final bool useFloatingLabel;
 
   final String? suffix;
 
   final List<TextInputFormatter>? inputFormatters;
+
+  // NEW
+  final int? maxLength;
+  final String? errorText;
 
   const AppTextField({
     super.key,
@@ -44,6 +47,10 @@ class AppTextField extends StatefulWidget {
     this.useFloatingLabel = true,
     this.suffix,
     this.inputFormatters,
+
+    // NEW
+    this.maxLength,
+    this.errorText,
   });
 
   @override
@@ -64,7 +71,7 @@ class _AppTextFieldState extends State<AppTextField> {
   /// A transparent icon used as a left-side counterweight so the typed text
   /// stays visually centred when the clear button is visible on the right.
   Widget get _balancingPrefix => const SizedBox(
-        width: 40, // same effective width as the clear IconButton
+        width: 40,
       );
 
   @override
@@ -103,6 +110,11 @@ class _AppTextFieldState extends State<AppTextField> {
           textInputAction: widget.textInputAction,
           textCapitalization: widget.textCapitalization,
           inputFormatters: widget.inputFormatters,
+
+          // NEW
+          maxLength: widget.maxLength,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+
           textAlign: widget.textAlign,
           style: AppTextStyles.inputText,
           cursorColor: AppColors.primary,
@@ -113,6 +125,12 @@ class _AppTextFieldState extends State<AppTextField> {
 
             hintText: widget.hint,
             hintStyle: AppTextStyles.inputHint,
+
+            // NEW
+            errorText: widget.errorText,
+
+            // Hide default counter
+            counterText: '',
 
             filled: true,
             fillColor: AppColors.surface,
@@ -138,9 +156,31 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
             ),
 
-            prefixIcon: (_isCentered && _showClear) ? _balancingPrefix : null,
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.red,
+                width: 1,
+              ),
+            ),
+
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.red,
+                width: 1.5,
+              ),
+            ),
+
+            prefixIcon: (_isCentered && _showClear)
+                ? _balancingPrefix
+                : null,
+
             prefixIconConstraints: (_isCentered && _showClear)
-                ? const BoxConstraints(minWidth: 0, minHeight: 0)
+                ? const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
+                  )
                 : null,
 
             suffixIcon: _showClear
@@ -165,9 +205,13 @@ class _AppTextFieldState extends State<AppTextField> {
                       )
                     : null,
 
-            suffixIconConstraints: widget.suffix != null && !_showClear
-                ? const BoxConstraints(minWidth: 0, minHeight: 0)
-                : null,
+            suffixIconConstraints:
+                widget.suffix != null && !_showClear
+                    ? const BoxConstraints(
+                        minWidth: 0,
+                        minHeight: 0,
+                      )
+                    : null,
           ),
         ),
       ],

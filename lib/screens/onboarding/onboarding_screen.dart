@@ -95,9 +95,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           label: 'Name',
                           hint: 'Please fill in your name',
                           useFloatingLabel: true,
+                          maxLength: 24,
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.done,
                           onSubmitted: _canContinue ? (_) => _saveName() : null,
+                          errorText: _nameController.text.length > 24
+                            ? 'Name is too long'
+                            : null,
                         ),
                         const SizedBox(height: 10),
                         Text(
