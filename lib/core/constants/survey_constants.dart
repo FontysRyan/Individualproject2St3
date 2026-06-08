@@ -37,6 +37,9 @@ class SurveyConstants {
   static const int defaultActivityHours = 1;
   static const int defaultActivityMinutes = 0;
 
+/// Maximum character length for an activity name.
+static const int activityNameMaxLength = 50;
+
   // ── Intro animation timings ───────────────────────────────────────────────
 
   static const Duration introAnimationDuration = Duration(milliseconds: 2800);

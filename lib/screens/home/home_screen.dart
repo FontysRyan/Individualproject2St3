@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/text_styles.dart';
 import '../../shared/widgets/app_background.dart';
 import '../../shared/widgets/pill_button.dart';
-// Import the new survey screen — adjust the path if your folder structure differs.
-import '../survey/survey_day_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -39,26 +37,9 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onPlanToday() {
-    // Use a custom fade-out/fade-in transition so the move to SurveyDayScreen
-    // feels like an in-place change rather than a slide push.
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        // No back-swipe during an active planning session keeps the flow clean.
-        fullscreenDialog: false,
-        pageBuilder: (_, _, _) =>
-            SurveyDayScreen(userName: widget.userName),
-        transitionsBuilder: (_, animation, _, child) {
-          return FadeTransition(
-            opacity: CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOut,
-            ),
-            child: child,
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 280),
-      ),
-    );
+    // Route through onGenerateRoute so the fade transition defined in main.dart
+    // is reused and the RouteLogger picks up the name correctly.
+    Navigator.pushNamed(context, '/survey/day', arguments: widget.userName);
   }
 
   @override
@@ -90,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
                   PillButton(
                     label: 'Start planning today',
                     icon: Icons.calendar_today_outlined,
-                    onTap: _onPlanToday, // ← updated
+                    onTap: _onPlanToday,
                   ),
 
                   const SizedBox(height: 16),

@@ -15,21 +15,27 @@ class SurveyProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: FadeTransition(
-        opacity: opacity,
+return Positioned(
+  left: 0,
+  right: 0,
+  bottom: 24,          // lifts it above the screen edge so it's visible
+  child: FadeTransition(
+    opacity: opacity,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
         child: LinearProgressIndicator(
           value: progress,
-          minHeight: 4,
+          minHeight: 6,          // slightly thicker than 4
           backgroundColor: AppColors.surface,
           valueColor: const AlwaysStoppedAnimation<Color>(
             AppColors.progressStart,
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 }

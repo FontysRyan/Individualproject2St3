@@ -13,11 +13,7 @@ import 'screens/survey/survey_day_screen.dart';
 // import 'screens/swipe_game/swipe_screen.dart';
 // import 'screens/overview/overview_screen.dart';
 
-// TODO: fix navigation from home to survey screen and return not logging correctly.
-// Navigating to: /home
-// Navigating to: null
-// Navigating to: null
-// Returning to: null
+// Note: unnamed routes (bottom sheets, dialogs) are filtered in RouteLogger — see below.
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -79,12 +75,17 @@ class CardsOnTimeApp extends StatelessWidget {
   }
 }
 
-/// Logs all navigation events.
+/// Logs named navigation events only.
+/// Unnamed routes (bottom sheets, dialogs, etc.) are intentionally skipped
+/// to keep the log readable — they have no route name by design.
 class RouteLogger extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    // ignore: avoid_print
-    print('Navigating to: ${route.settings.name}');
+    final name = route.settings.name;
+    if (name != null) {
+      // ignore: avoid_print
+      print('Navigating to: $name');
+    }
     super.didPush(route, previousRoute);
   }
 
@@ -93,18 +94,21 @@ class RouteLogger extends NavigatorObserver {
     Route<dynamic>? newRoute,
     Route<dynamic>? oldRoute,
   }) {
-    // ignore: avoid_print
-    print('Navigating to: ${newRoute?.settings.name}');
-    super.didReplace(
-      newRoute: newRoute,
-      oldRoute: oldRoute,
-    );
+    final name = newRoute?.settings.name;
+    if (name != null) {
+      // ignore: avoid_print
+      print('Navigating to: $name');
+    }
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    // ignore: avoid_print
-    print('Returning to: ${previousRoute?.settings.name}');
+    final name = previousRoute?.settings.name;
+    if (name != null) {
+      // ignore: avoid_print
+      print('Returning to: $name');
+    }
     super.didPop(route, previousRoute);
   }
 }

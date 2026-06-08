@@ -4,6 +4,8 @@ import '../../core/constants/survey_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/text_styles.dart';
 import '../../shared/models/survey_data.dart';
+import 'package:flutter/services.dart';
+
 
 class ActivityInputCard extends StatefulWidget {
   final int index;
@@ -38,9 +40,7 @@ class _ActivityInputCardState extends State<ActivityInputCard> {
   void initState() {
     super.initState();
 
-    _activityNameController = TextEditingController(
-      text: widget.initialName,
-    );
+    _activityNameController = TextEditingController(text: widget.initialName);
 
     _selectedHours = widget.initialHours;
     _selectedMinutes = widget.initialMinutes;
@@ -88,17 +88,14 @@ class _ActivityInputCardState extends State<ActivityInputCard> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: _isDurationValid
               ? AppColors.border
-              : AppColors.error.withValues(alpha: 0.5), 
+              : AppColors.error.withValues(alpha: 0.5),
           width: 1,
         ),
       ),
@@ -113,9 +110,7 @@ class _ActivityInputCardState extends State<ActivityInputCard> {
             const SizedBox(height: 8),
             Text(
               'Select at least 1 hour or ${SurveyConstants.activityMinDurationMinutes} minutes',
-              style: AppTextStyles.labelSmall.copyWith(
-                color: AppColors.error,
-              ),
+              style: AppTextStyles.labelSmall.copyWith(color: AppColors.error),
             ),
           ],
         ],
@@ -133,14 +128,16 @@ class _ActivityInputCardState extends State<ActivityInputCard> {
             onChanged: (_) {
               _notifyActivityChanged();
             },
+            maxLength: SurveyConstants.activityNameMaxLength,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             style: AppTextStyles.bodyMedium,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
               hintText: 'Activity name',
+              counterText:
+                  '', // hides the "0/50" counter Flutter adds by default
               hintStyle: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondary.withValues(
-                  alpha: 0.5,
-                ),
+                color: AppColors.textSecondary.withValues(alpha: 0.5),
               ),
               filled: false,
               isDense: true,
@@ -149,9 +146,7 @@ class _ActivityInputCardState extends State<ActivityInputCard> {
               enabledBorder: InputBorder.none,
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: AppColors.primary.withValues(
-                    alpha: 0.6,
-                  ),
+                  color: AppColors.primary.withValues(alpha: 0.6),
                   width: 1,
                 ),
               ),
@@ -182,16 +177,9 @@ class _ActivityInputCardState extends State<ActivityInputCard> {
   Widget _buildDurationSection() {
     return Row(
       children: [
-        Icon(
-          Icons.schedule_outlined,
-          size: 16,
-          color: AppColors.textSecondary,
-        ),
+        Icon(Icons.schedule_outlined, size: 16, color: AppColors.textSecondary),
         const SizedBox(width: 8),
-        Text(
-          'Duration:',
-          style: AppTextStyles.labelSmall,
-        ),
+        Text('Duration:', style: AppTextStyles.labelSmall),
         const SizedBox(width: 12),
 
         _ActivityDurationSelector(
@@ -244,9 +232,7 @@ class _ActivityDurationSelector extends StatelessWidget {
       children: [
         _DurationAdjustButton(
           icon: Icons.remove,
-          onTap: value > minValue
-              ? () => onChanged(value - stepAmount)
-              : null,
+          onTap: value > minValue ? () => onChanged(value - stepAmount) : null,
         ),
         const SizedBox(width: 6),
         SizedBox(
@@ -262,9 +248,7 @@ class _ActivityDurationSelector extends StatelessWidget {
         const SizedBox(width: 6),
         _DurationAdjustButton(
           icon: Icons.add,
-          onTap: value < maxValue
-              ? () => onChanged(value + stepAmount)
-              : null,
+          onTap: value < maxValue ? () => onChanged(value + stepAmount) : null,
         ),
       ],
     );
@@ -275,10 +259,7 @@ class _DurationAdjustButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
 
-  const _DurationAdjustButton({
-    required this.icon,
-    this.onTap,
-  });
+  const _DurationAdjustButton({required this.icon, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -300,9 +281,7 @@ class _DurationAdjustButton extends StatelessWidget {
           size: 16,
           color: isEnabled
               ? AppColors.primary
-              : AppColors.textSecondary.withValues(
-                  alpha: 0.3,
-                ),
+              : AppColors.textSecondary.withValues(alpha: 0.3),
         ),
       ),
     );
