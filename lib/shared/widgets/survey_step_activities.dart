@@ -23,6 +23,9 @@ import 'survey_section_header.dart';
 // Why? It keeps all the state management in one place (the parent) instead of spreading it across multiple widgets. 
 // The input cards are also simpler this way since they don't have to know about the overall list, just their own fields and index.
 // ─────────────────────────────────────────────────────────────
+
+/// TODO: clean this code up to make more understandable for myself and fix the comments.
+
 class SurveyStepActivities extends StatelessWidget {
   final List<ActivityEntry> activities;
   final List<int> activityKeys;

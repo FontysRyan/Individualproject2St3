@@ -24,6 +24,9 @@ import '../../shared/widgets/delete_popup.dart';
 // After _introCtrl completes the survey content fades in and the
 // controller is never used again.
 // ─────────────────────────────────────────────────────────────
+
+// TODO: must make sure that user cannot name two activity cards the same name, it will create bugs for the game and confusion.
+
 class SurveyDayScreen extends StatefulWidget {
   final String userName;
 
@@ -38,15 +41,19 @@ class SurveyDayScreen extends StatefulWidget {
 
 class _SurveyDayScreenState extends State<SurveyDayScreen>
     with SingleTickerProviderStateMixin {
-  // ── Intro animation controller (runs once, 0.0 → 1.0) ──────
+  // Intro animation controller (runs once, 0.0 → 1.0)
   late final AnimationController _introCtrl;
 
   // Title fades in then slides upward and out before the card expands.
+  // These fields are created for the intro animation. They may be unused
+  // directly in this file but are kept for clarity and future use.
+  // ignore: unused_field
   late final Animation<double> _titleOpacity;
+  // ignore: unused_field
   late final Animation<Offset> _titleSlide;
 
   // _shapeProgress drives width/height from the small pill to full card size.
-  // _radiusProgress drives border-radius from fully round to M3 corner radius —
+  // _radiusProgress drives border-radius from fully round to M3 corner radius
   // it starts later so the shape is already large before it flattens.
   late final Animation<double> _shapeProgress;
   late final Animation<double> _radiusProgress;
@@ -54,7 +61,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
   // Fades in the survey content and progress bar once the card is full size.
   late final Animation<double> _surveyContentOpacity;
 
-  // ── Survey state ────────────────────────────────────────────
+  // Survey state (owned here, passed down as needed). All state is reset if the user goes (steps: how many hours you got today, activity, ready overview)
   int _currentScreenIndex = SurveyConstants.stepTime;
 
   int _availableHours = SurveyConstants.defaultAvailableHours;
@@ -67,9 +74,9 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
   final List<int> _activityKeys = [];
   int _nextActivityKey = 0;
 
-  // ── Derived validation ──────────────────────────────────────
+  // Derived validation
 
-  /// Progress bar value: advances evenly across the 3 screens (0.33 → 0.66 → 1.0).
+  /// Progress bar value: advances evenly across the 3 screens (0.33 → 0.66 → 1.0). Cause we got 3 totalSteps;
   double get _screenProgress =>
       (_currentScreenIndex + 1) / SurveyConstants.totalSteps;
 
@@ -100,15 +107,15 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
       duration: SurveyConstants.introAnimationDuration,
     );
 
-    // Title: fade in → hold → fade out. Weights are proportional to total duration.
+    // Title: fade in > hold > fade out. Weights are proportional to total duration.
     _titleOpacity = TweenSequence<double>([
       TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 12), // fade in
       TweenSequenceItem(tween: ConstantTween(1.0), weight: 8),            // hold
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 16), // fade out
       TweenSequenceItem(tween: ConstantTween(0.0), weight: 64),           // gone
-    ]).animate(_introCtrl);
+    ]).animate(_introCtrl); // only ment as start of intro
 
-    // Slides the title upward while it fades out (interval 0.20–0.36).
+    // Slides the title upward while it fades out (interval 0.20–0.36) for intro animation.
     _titleSlide = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(0, -2.5),
@@ -117,20 +124,20 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
       curve: const Interval(0.20, 0.36, curve: Curves.easeIn),
     ));
 
-    // Card grows from pill to full size between 0.28 and 0.82.
+    // Card grows from pill to full size between 0.28 and 0.82. (intro animation)
     _shapeProgress = CurvedAnimation(
       parent: _introCtrl,
       curve: const Interval(0.28, 0.82, curve: Curves.easeInOut),
     );
 
     // Border-radius flattens from fully round to M3 corner.
-    // Starts at 0.54 so it only flattens once the card is already large.
+    // Starts at 0.54 so it only flattens once the card is already large. (intro animation)
     _radiusProgress = CurvedAnimation(
       parent: _introCtrl,
       curve: const Interval(0.54, 0.82, curve: Curves.easeOut),
     );
 
-    // Survey content fades in at the very end, after the card is fully open.
+    // Survey content fades in at the very end, after the card is fully open. (intro animation)
     _surveyContentOpacity = CurvedAnimation(
       parent: _introCtrl,
       curve: const Interval(0.88, 1.0, curve: Curves.easeOut),
@@ -145,7 +152,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
     super.dispose();
   }
 
-  // ── Screen navigation ────────────────────────────────────────
+  // Screen navigation
 
   void _advanceToNextScreen() {
     if (_currentScreenIndex < SurveyConstants.stepReady) {
@@ -165,27 +172,26 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
   // Converts raw state into a typed SurveyDayData and hands it off.
   // TimeOfDay is merged with today's date because the swipe game
   // needs a full DateTime to calculate time slots.
-  void _onSurveyConfirmed() {
-    final data = SurveyDayData(
-      availableHours: _availableHours,
-      availableMinutes: _availableMinutes,
-      startTime: _startTime != null
-          ? DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day,
-              _startTime!.hour,
-              _startTime!.minute,
-            )
-          : null,
-      activities: List.unmodifiable(_plannedActivities),
-    );
+void _onSurveyConfirmed() {
+  final data = SurveyDayData(
+    availableHours: _availableHours,
+    availableMinutes: _availableMinutes,
+    startTime: _startTime != null
+        ? DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+            _startTime!.hour,
+            _startTime!.minute,
+          )
+        : null,
+    activities: List.unmodifiable(_plannedActivities),
+  );
 
-    debugPrint('Survey complete: $data');
-    // TODO: push to swipe game screen with data
-  }
+  Navigator.pushNamed(context, '/swipe/day', arguments: data);
+}
 
-  // ── Activity mutations (owned here, passed down as callbacks) ─
+  // ── Activity mutations (owned here, passed down as callbacks)
 
   void _addActivity() {
     setState(() {
@@ -213,8 +219,8 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
       icon: Icons.delete_outline_rounded,
       confirmLabel: 'Remove',
       cancelLabel: 'Cancel',
-      confirmColor: AppColors.oppositeOfPrimary, // material red is universally recognized as "destructive" but not too harsh on the eyes
-      cancelColor: AppColors.primary, // a positive color to balance the red and make the choice clearer
+      confirmColor: AppColors.oppositeOfPrimary, 
+      cancelColor: AppColors.primary, 
     );
     if (confirmed) {
       setState(() {
@@ -223,9 +229,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
       });
     }
   }
-
-  // ── Helpers ──────────────────────────────────────────────────
-
+  
   // Maps the animation progress value (0.0–1.0) to a background color.
   // The card transitions through 3 colors: background_1 → _2 (before 0.50)
   // then _2 → _3 (after 0.50), matching the card expansion timing.
@@ -240,7 +244,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
 
   static double _lerp(double a, double b, double t) => a + (b - a) * t;
 
-  // ── Screen builders ──────────────────────────────────────────
+  // Screen builders
 
   /// Returns the widget for the current survey screen.
   /// AnimatedSwitcher in [build] handles the crossfade between screens.
@@ -260,7 +264,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
     }
   }
 
-  Widget _buildTimeSelectionScreen() {
+  Widget _buildTimeSelectionScreen() { // the first screen (Step 1) Select how many hrs/min you got today.
     return SurveyStepTime(
       userName: widget.userName,
       availableHours: _availableHours,
@@ -275,7 +279,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
     );
   }
 
-  Widget _buildActivityPlanningScreen() {
+  Widget _buildActivityPlanningScreen() { // the second screen (Step 2) Plan your activities, add cards with name and duration.
     return SurveyStepActivities(
       activities: _plannedActivities,
       activityKeys: _activityKeys,
@@ -289,7 +293,7 @@ class _SurveyDayScreenState extends State<SurveyDayScreen>
     );
   }
 
-  Widget _buildReadyOverviewScreen() {
+  Widget _buildReadyOverviewScreen() { // the third screen (Step 3) Review your plan before submitting.
     return SurveyStepReady(
       // Ready screen is read-only; activities are passed for display only.
       // Editing/deleting happens in the activity planning screen (go back).

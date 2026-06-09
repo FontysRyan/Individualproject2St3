@@ -8,12 +8,15 @@ import 'core/constants/dev_flags.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/survey/survey_day_screen.dart';
+import 'screens/swipe_game/swipe_game_screen.dart';
+
+// models
+import 'shared/models/survey_data.dart';
 
 // Uncomment screens for later, don't delete this code yet as I will need it for the next steps of development. -Past me
-// import 'screens/swipe_game/swipe_screen.dart';
 // import 'screens/overview/overview_screen.dart';
 
-// Note: unnamed routes (bottom sheets, dialogs) are filtered in RouteLogger — see below.
+// Note: unnamed routes (bottom sheets, dialogs) are filtered in RouteLogger — see below. We only log most of the time screens for cleaner way of working.
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,16 +33,12 @@ class CardsOnTimeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       home: const _StartupRouter(),
-      navigatorObservers: [
-        RouteLogger(),
-      ],
+      navigatorObservers: [RouteLogger()],
       onGenerateRoute: (settings) {
-        switch (settings.name) {
+        switch (settings.name) { // all screens must be in the routelogger to show up and also to be directed to, 
+        // so if you add a new screen, add it here too. (inspired by innergames project I made with my group.)
           case '/onboarding':
-            return _fadeRoute(
-              const OnboardingScreen(),
-              settings: settings,
-            );
+            return _fadeRoute(const OnboardingScreen(), settings: settings);
 
           case '/home':
             final userName = settings.arguments as String? ?? '';
@@ -57,6 +56,18 @@ class CardsOnTimeApp extends StatelessWidget {
               settings: settings,
             );
 
+case '/swipe/day':
+  final data = settings.arguments;
+  if (data is! SurveyDayData) {
+    // Guard against Flutter trying to resolve this route on startup
+    // without arguments (e.g. hot-restart, web URL parsing).
+    return _fadeRoute(const _StartupRouter(), settings: settings);
+  }
+
+  return _fadeRoute(
+    SwipeGameScreen(surveyData: data),
+    settings: settings,
+  );
           default:
             // ignore: avoid_print
             print('Route not found: ${settings.name}');
@@ -64,9 +75,7 @@ class CardsOnTimeApp extends StatelessWidget {
             return MaterialPageRoute(
               settings: settings,
               builder: (_) => const Scaffold(
-                body: Center(
-                  child: Text('404 – screen not found'),
-                ),
+                body: Center(child: Text('404 – screen not found')),
               ),
             );
         }
@@ -90,10 +99,7 @@ class RouteLogger extends NavigatorObserver {
   }
 
   @override
-  void didReplace({
-    Route<dynamic>? newRoute,
-    Route<dynamic>? oldRoute,
-  }) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     final name = newRoute?.settings.name;
     if (name != null) {
       // ignore: avoid_print
@@ -181,11 +187,7 @@ class _StartupRouterState extends State<_StartupRouter> {
       // ignore: avoid_print
       print('========================================');
 
-      Navigator.pushReplacementNamed(
-        context,
-        '/home',
-        arguments: savedName,
-      );
+      Navigator.pushReplacementNamed(context, '/home', arguments: savedName);
     } else {
       // ignore: avoid_print
       print('[StartupRouter] Decision = ONBOARDING');
@@ -196,10 +198,7 @@ class _StartupRouterState extends State<_StartupRouter> {
       // ignore: avoid_print
       print('========================================');
 
-      Navigator.pushReplacementNamed(
-        context,
-        '/onboarding',
-      );
+      Navigator.pushReplacementNamed(context, '/onboarding');
     }
   }
 
@@ -209,19 +208,13 @@ class _StartupRouterState extends State<_StartupRouter> {
   }
 }
 
-PageRoute<T> _fadeRoute<T>(
-  Widget page, {
-  required RouteSettings settings,
-}) {
+PageRoute<T> _fadeRoute<T>(Widget page, {required RouteSettings settings}) {
   return PageRouteBuilder<T>(
     settings: settings,
     pageBuilder: (_, _, _) => page,
     transitionsBuilder: (_, animation, _, child) {
       return FadeTransition(
-        opacity: CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOut,
-        ),
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
         child: child,
       );
     },
