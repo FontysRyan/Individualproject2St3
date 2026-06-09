@@ -34,7 +34,7 @@ class SurveyConstants {
   /// Minimum duration for a single activity (minutes).
   static const int activityMinDurationMinutes = 15;
 
-  static const int defaultActivityHours = 1;
+  static const int defaultActivityHours = 0;
   static const int defaultActivityMinutes = 0;
 
 /// Maximum character length for an activity name.

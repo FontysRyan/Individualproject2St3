@@ -17,6 +17,7 @@ import '../../shared/widgets/swipe_time_gain_popup.dart';
 // TODO: don't fully understand code, must make it my own and update it fully to fit the design and my vision for the game.
 // TODO: must use shape pixel circle instead of how they show the circles now.
 /// TODO: clean this code up to make more understandable for myself and fix the comments.
+/// TODO: add a swipe_game_constants.dart for all the magic numbers in this file and make them easily tweakable for playtesting and future updates.
 
 
 // ─────────────────────────────────────────────────────────────────────────────
